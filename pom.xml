@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>edu.mit.simile</groupId>
+  <artifactId>tracer</artifactId>
+  <name>SIMILE Tracer</name>
+  <version>1.0</version>
+  
+  <scm>
+    <connection>scm:svn:http://simile.mit.edu/repository/tracer/trunk/</connection>
+    <developerConnection>scm:svn:http://simile.mit.edu/repository/tracer/trunk/</developerConnection>
+    <url>http://simile.mit.edu/viewsvn/tracer/trunk/</url>
+  </scm>
+  
+  <organization>
+    <name>MIT SIMILE Project</name>
+    <url>http://simile.mit.edu/</url>
+  </organization>
+  
+  <licenses>
+    <license>
+      <name>BSD</name>
+      <url>http://simile.mit.edu/license</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+    
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <inherited>true</inherited>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+          <downloadSources>true</downloadSources>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>simile.mit.edu</id>
+      <url>http://simile.mit.edu/maven-proxy</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.13</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+    </dependency>
+  </dependencies>
+  
+  <distributionManagement>
+    <repository>
+      <id>simile.mit.edu</id>
+      <url>scpexe://simile.mit.edu/var/maven</url>
+    </repository>
+  </distributionManagement>
+  
+</project>
