@@ -6,18 +6,20 @@ import java.util.Date;
 import org.apache.log4j.Layout;
 import org.apache.log4j.spi.LoggingEvent;
 
+/**
+ * This is a special Log4j log formatter that is capable of reacting on special log messages
+ * and 'indent' the logs accordingly. This is very useful to visually inspect a debug log
+ * and see what calls what. An example of logs are "> method()" and "< method()" where > and <
+ * are used to indicate respectively "entering" and "exiting".
+ */
 public class Tracer extends Layout {
 
-    protected static final int CONTEXT_SIZE = 15;
-
+    protected static final int CONTEXT_SIZE = 25;
     protected static final long MAX_DELTA = 10000;
 
     protected final StringBuffer buf = new StringBuffer(256);
-
     protected Calendar calendar = Calendar.getInstance();
-
     protected long previousTime = 0;
-
     protected int indentation = 0;
 
     public void activateOptions() {
@@ -26,8 +28,12 @@ public class Tracer extends Layout {
 
     public String format(LoggingEvent event) {
         String message = event.getRenderedMessage();
+        if (message == null) return "";
+        if (message.length() < 2) return message;
+        
         char leader = message.charAt(0);
-        if ((leader == '<') && (this.indentation > 0)) this.indentation--;
+        char secondLeader = message.charAt(1);
+        if ((leader == '<') && (secondLeader == ' ') && (this.indentation > 0)) this.indentation--;
 
         // Reset buf
         buf.setLength(0);
@@ -42,11 +48,11 @@ public class Tracer extends Layout {
         }
         previousTime = now;
 
-        if ((previousTime == 0) || (delta > MAX_DELTA)) {
-            buf.append('\n');
-            indentation = 0; // reset indentation after a while, as we might
-            // have runaway/unmatched log entries
-        }
+//        if ((previousTime == 0) || (delta > MAX_DELTA)) {
+//            buf.append('\n');
+//            indentation = 0; // reset indentation after a while, as we might
+//            // have runaway/unmatched log entries
+//        }
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         if (hour < 10) buf.append('0');
@@ -74,8 +80,8 @@ public class Tracer extends Layout {
             buf.append(context);
             pad(buf, CONTEXT_SIZE - context.length(), ' ');
         } else {
-            buf.append("...");
-            buf.append(context.substring(context.length() - CONTEXT_SIZE + 3));
+            buf.append("..");
+            buf.append(context.substring(context.length() - CONTEXT_SIZE + 2));
         }
         buf.append("] ");
 
@@ -87,7 +93,7 @@ public class Tracer extends Layout {
         buf.append(delta);
         buf.append("ms)\n");
 
-        if (leader == '>') indentation++;
+        if ((leader == '>') && (secondLeader == ' ')) indentation++;
 
         return buf.toString();
     }
