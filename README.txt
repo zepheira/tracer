@@ -35,5 +35,4 @@ as a template for your log4j.properties file
   
   
                                                   Stefano Mazzocchi
-                                                <stefanom at mit.edu>
 
